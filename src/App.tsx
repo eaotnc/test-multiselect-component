@@ -22,8 +22,12 @@ function App() {
         onRemove={(e) => console.log(e)} // Function will trigger on remove event
         displayValue="name" // Property name to display in the dropdown options
       /> */}
-      <PopOverToggle />
-      <TableSort data={data} />
+      <div style={{ padding: "20px" }}>
+        <PopOverToggle />
+        <br />
+        <br />
+        <TableSort data={data} />
+      </div>
     </div>
   );
 }

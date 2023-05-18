@@ -1,6 +1,7 @@
 import { Popover, Button, TextInput } from "@mantine/core";
 import { TableSelection } from "./TableSelect";
 import { data } from "../config";
+import { SearchAbleAndSelectedTable } from "./SearchAbleAndSelectTable";
 
 export function PopOverToggle() {
   return (
@@ -14,7 +15,8 @@ export function PopOverToggle() {
             theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
         })}
       >
-        <TableSelection data={data} />
+        <SearchAbleAndSelectedTable data={data} />
+        {/* <TableSelection data={data} /> */}
       </Popover.Dropdown>
     </Popover>
   );

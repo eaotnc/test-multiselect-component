@@ -9,6 +9,8 @@ import {
   Center,
   TextInput,
   rem,
+  Checkbox,
+  Avatar,
 } from "@mantine/core";
 import { keys } from "@mantine/utils";
 import {
@@ -19,6 +21,13 @@ import {
 } from "@tabler/icons-react";
 
 const useStyles = createStyles((theme) => ({
+  rowSelected: {
+    backgroundColor:
+      theme.colorScheme === "dark"
+        ? theme.fn.rgba(theme.colors[theme.primaryColor][7], 0.2)
+        : theme.colors[theme.primaryColor][0],
+  },
+
   th: {
     padding: "0 !important",
   },
@@ -43,6 +52,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface RowData {
+  id: string;
+  avatar: string;
   name: string;
   email: string;
   company: string;
@@ -111,18 +122,25 @@ function sortData(
   );
 }
 
-export function TableSort({ data }: TableSortProps) {
+export function SearchAbleAndSelectedTable({ data }: TableSortProps) {
+  const { classes, cx } = useStyles();
   const [search, setSearch] = useState("");
+  const [selection, setSelection] = useState<string[]>([]);
   const [sortedData, setSortedData] = useState(data);
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
 
-  const setSorting = (field: keyof RowData) => {
-    const reversed = field === sortBy ? !reverseSortDirection : false;
-    setReverseSortDirection(reversed);
-    setSortBy(field);
-    setSortedData(sortData(data, { sortBy: field, reversed, search }));
-  };
+  const toggleAll = () =>
+    setSelection((current) =>
+      current.length === data.length ? [] : data.map((item) => item.id)
+    );
+
+  const toggleRow = (id: string) =>
+    setSelection((current) =>
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id]
+    );
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
@@ -132,12 +150,27 @@ export function TableSort({ data }: TableSortProps) {
     );
   };
 
-  const rows = sortedData.map((row) => (
-    <tr key={row.name}>
-      <td>{row.name}</td>
-      <td>{row.email}</td>
-    </tr>
-  ));
+  const rows = sortedData.map((item) => {
+    const selected = selection.includes(item.id);
+    return (
+      <tr key={item.id} className={cx({ [classes.rowSelected]: selected })}>
+        <td>
+          <Checkbox
+            checked={selection.includes(item.id)}
+            onChange={() => toggleRow(item.id)}
+            transitionDuration={0}
+          />
+        </td>
+        <td>
+          <Group spacing="sm">
+            <Text size="sm" weight={500}>
+              {item.name}
+            </Text>
+          </Group>
+        </td>
+      </tr>
+    );
+  });
 
   return (
     <ScrollArea>
@@ -150,21 +183,20 @@ export function TableSort({ data }: TableSortProps) {
       />
       <Table miw={300} verticalSpacing="sm">
         <thead>
-          <tr>
-            <Th
-              sorted={sortBy === "name"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("name")}
-            >
-              Name
-            </Th>
-            <Th
-              sorted={sortBy === "email"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("email")}
-            >
-              Email
-            </Th>
+          <tr style={{ color: "red" }}>
+            <th style={{ width: rem(40) }}>
+              <Checkbox
+                onChange={toggleAll}
+                checked={selection.length === data.length}
+                indeterminate={
+                  selection.length > 0 && selection.length !== data.length
+                }
+                transitionDuration={0}
+              />
+            </th>
+            <th>
+              <span style={{ fontWeight: "bold" }}>Select All </span>
+            </th>
           </tr>
         </thead>
         <tbody>

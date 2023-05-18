@@ -32,12 +32,15 @@ interface TableSelectionProps {
 export function TableSelection({ data }: TableSelectionProps) {
   const { classes, cx } = useStyles();
   const [selection, setSelection] = useState(["1"]);
+  console.log("🚀 ~ selection:", selection);
+
   const toggleRow = (id: string) =>
     setSelection((current) =>
       current.includes(id)
         ? current.filter((item) => item !== id)
         : [...current, id]
     );
+
   const toggleAll = () =>
     setSelection((current) =>
       current.length === data.length ? [] : data.map((item) => item.id)
@@ -62,15 +65,13 @@ export function TableSelection({ data }: TableSelectionProps) {
             </Text>
           </Group>
         </td>
-        <td>{item.email}</td>
-        <td>{item.job}</td>
       </tr>
     );
   });
 
   return (
     <ScrollArea>
-      <Table miw={800} verticalSpacing="sm">
+      <Table miw={300} verticalSpacing="sm">
         <thead>
           <tr>
             <th style={{ width: rem(40) }}>
@@ -84,8 +85,6 @@ export function TableSelection({ data }: TableSelectionProps) {
               />
             </th>
             <th>Select All</th>
-            <th></th>
-            <th></th>
           </tr>
         </thead>
         <tbody>{rows}</tbody>

@@ -1,5 +1,4 @@
 import { Popover, Button, TextInput, ActionIcon } from "@mantine/core";
-import { TableSelection } from "./TableSelect";
 import { data } from "../config";
 import { SearchAbleAndSelectedTable } from "./SearchAbleAndSelectTable";
 import { IconCaretDown } from "@tabler/icons-react";

@@ -54,28 +54,6 @@ function filterData(data: RowData[], search: string) {
   );
 }
 
-function sortData(
-  data: RowData[],
-  payload: { sortBy: keyof RowData | null; reversed: boolean; search: string }
-) {
-  const { sortBy } = payload;
-
-  if (!sortBy) {
-    return filterData(data, payload.search);
-  }
-
-  return filterData(
-    [...data].sort((a, b) => {
-      if (payload.reversed) {
-        return b[sortBy].localeCompare(a[sortBy]);
-      }
-
-      return a[sortBy].localeCompare(b[sortBy]);
-    }),
-    payload.search
-  );
-}
-
 export function SearchAbleAndSelectedTable({
   choice,
   selectionValue,
@@ -85,8 +63,6 @@ export function SearchAbleAndSelectedTable({
   const [search, setSearch] = useState("");
   const [selection, setSelection] = useState<string[]>(selectionValue);
   const [sortedChoice, setSortedChoice] = useState(choice);
-  const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
-  const [reverseSortDirection, setReverseSortDirection] = useState(false);
 
   const toggleAll = () => {
     const newSelection =
@@ -106,13 +82,7 @@ export function SearchAbleAndSelectedTable({
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
     setSearch(value);
-    setSortedChoice(
-      sortData(choice, {
-        sortBy,
-        reversed: reverseSortDirection,
-        search: value,
-      })
-    );
+    setSortedChoice(filterData(choice, value));
   };
 
   const rows = sortedChoice.map((item) => {
@@ -128,7 +98,7 @@ export function SearchAbleAndSelectedTable({
         </td>
         <td>
           <Group spacing="sm">
-            <Text size="sm" weight={500}>
+            <Text size="sm" weight={350}>
               {item.name}
             </Text>
           </Group>
@@ -149,7 +119,7 @@ export function SearchAbleAndSelectedTable({
       <Table miw={300} verticalSpacing="sm">
         <thead>
           <tr style={{ color: "red" }}>
-            <th style={{ width: rem(40) }}>
+            <th style={{ width: "20px" }}>
               <Checkbox
                 onChange={toggleAll}
                 checked={selection.length === choice.length}
@@ -160,7 +130,9 @@ export function SearchAbleAndSelectedTable({
               />
             </th>
             <th>
-              <span style={{ fontWeight: "bold" }}>Select All </span>
+              <Text size="sm" weight={700}>
+                Select All
+              </Text>
             </th>
           </tr>
         </thead>

@@ -51,13 +51,7 @@ interface RowData {
 
 interface TableSortProps {
   data: RowData[];
-}
-
-interface ThProps {
-  children: React.ReactNode;
-  reversed: boolean;
-  sorted: boolean;
-  onSort(): void;
+  onSelect: (selectionItem: string[]) => void;
 }
 
 function filterData(data: RowData[], search: string) {
@@ -89,7 +83,7 @@ function sortData(
   );
 }
 
-export function SearchAbleAndSelectedTable({ data }: TableSortProps) {
+export function SearchAbleAndSelectedTable({ data, onSelect }: TableSortProps) {
   const { classes, cx } = useStyles();
   const [search, setSearch] = useState("");
   const [selection, setSelection] = useState<string[]>([]);
@@ -97,17 +91,20 @@ export function SearchAbleAndSelectedTable({ data }: TableSortProps) {
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
 
-  const toggleAll = () =>
-    setSelection((current) =>
-      current.length === data.length ? [] : data.map((item) => item.id)
-    );
+  const toggleAll = () => {
+    const newSelection =
+      selection.length === data.length ? [] : data.map((item) => item.id);
+    setSelection(newSelection);
+    onSelect(newSelection);
+  };
 
-  const toggleRow = (id: string) =>
-    setSelection((current) =>
-      current.includes(id)
-        ? current.filter((item) => item !== id)
-        : [...current, id]
-    );
+  const toggleRow = (id: string) => {
+    const newSelection = selection.includes(id)
+      ? selection.filter((item) => item !== id)
+      : [...selection, id];
+    setSelection(newSelection);
+    onSelect(newSelection);
+  };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;

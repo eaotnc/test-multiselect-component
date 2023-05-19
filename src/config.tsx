@@ -1,6 +1,6 @@
 export const data = [
   {
-    id: "1",
+    id: "Robert",
     avatar: "",
     name: "Robert Wolfkisser",
     email: "rob_wolf@gmail.com",
@@ -9,7 +9,7 @@ export const data = [
   },
 
   {
-    id: "2",
+    id: "Jill",
     avatar: "",
     name: "Jill Jailbreaker",
     email: "jj@breaker.com",
@@ -17,7 +17,7 @@ export const data = [
     job: "Engineer",
   },
   {
-    id: "3",
+    id: "Henry",
     avatar: "",
     name: "Henry Silkeater",
     email: "henry@silkeater.io",
@@ -25,7 +25,7 @@ export const data = [
     job: "Designer",
   },
   {
-    id: "4",
+    id: "Bill",
     avatar: "",
     name: "Bill Horsefighter",
     email: "bhorsefighter@gmail.com",
@@ -33,7 +33,7 @@ export const data = [
     job: "Designer",
   },
   {
-    id: "5",
+    id: "Jeremy",
     avatar: "",
     name: "Jeremy Footviewer",
     email: "jeremy@foot.dev",

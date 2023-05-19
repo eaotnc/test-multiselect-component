@@ -7,17 +7,17 @@ import { useState } from "react";
 
 export function PopOverToggle() {
   const [selection, setSelection] = useState<string[]>([]);
-  console.log("🚀 ~ selection:", selection);
 
   const onSelect = (selectionItem: string[]) => {
     setSelection(selectionItem);
   };
 
   const renderSelection = () => {
-    if (selection.length < 3) {
+    if (selection.length <= 3) {
       return selection.map((item, key) => (
         <span>
-          {item} {key === selection.length - 1 ? " " : ","}
+          {item}
+          {key === selection.length - 1 ? " " : ", "}
         </span>
       ));
     } else {
@@ -41,8 +41,11 @@ export function PopOverToggle() {
             theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
         })}
       >
-        <SearchAbleAndSelectedTable data={data} onSelect={onSelect} />
-        {/* <TableSelection data={data} /> */}
+        <SearchAbleAndSelectedTable
+          choice={data}
+          onSelect={onSelect}
+          selectionValue={selection}
+        />
       </Popover.Dropdown>
     </Popover>
   );

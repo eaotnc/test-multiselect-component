@@ -3,22 +3,14 @@ import {
   createStyles,
   Table,
   ScrollArea,
-  UnstyledButton,
   Group,
   Text,
-  Center,
   TextInput,
   rem,
   Checkbox,
-  Avatar,
 } from "@mantine/core";
 import { keys } from "@mantine/utils";
-import {
-  IconSelector,
-  IconChevronDown,
-  IconChevronUp,
-  IconSearch,
-} from "@tabler/icons-react";
+import { IconSearch } from "@tabler/icons-react";
 
 const useStyles = createStyles((theme) => ({
   rowSelected: {
@@ -50,7 +42,8 @@ interface RowData {
 }
 
 interface TableSortProps {
-  data: RowData[];
+  choice: RowData[];
+  selectionValue: string[];
   onSelect: (selectionItem: string[]) => void;
 }
 
@@ -83,17 +76,21 @@ function sortData(
   );
 }
 
-export function SearchAbleAndSelectedTable({ data, onSelect }: TableSortProps) {
+export function SearchAbleAndSelectedTable({
+  choice,
+  selectionValue,
+  onSelect,
+}: TableSortProps) {
   const { classes, cx } = useStyles();
   const [search, setSearch] = useState("");
-  const [selection, setSelection] = useState<string[]>([]);
-  const [sortedData, setSortedData] = useState(data);
+  const [selection, setSelection] = useState<string[]>(selectionValue);
+  const [sortedChoice, setSortedChoice] = useState(choice);
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
 
   const toggleAll = () => {
     const newSelection =
-      selection.length === data.length ? [] : data.map((item) => item.id);
+      selection.length === choice.length ? [] : choice.map((item) => item.id);
     setSelection(newSelection);
     onSelect(newSelection);
   };
@@ -109,12 +106,16 @@ export function SearchAbleAndSelectedTable({ data, onSelect }: TableSortProps) {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
     setSearch(value);
-    setSortedData(
-      sortData(data, { sortBy, reversed: reverseSortDirection, search: value })
+    setSortedChoice(
+      sortData(choice, {
+        sortBy,
+        reversed: reverseSortDirection,
+        search: value,
+      })
     );
   };
 
-  const rows = sortedData.map((item) => {
+  const rows = sortedChoice.map((item) => {
     const selected = selection.includes(item.id);
     return (
       <tr key={item.id} className={cx({ [classes.rowSelected]: selected })}>
@@ -151,9 +152,9 @@ export function SearchAbleAndSelectedTable({ data, onSelect }: TableSortProps) {
             <th style={{ width: rem(40) }}>
               <Checkbox
                 onChange={toggleAll}
-                checked={selection.length === data.length}
+                checked={selection.length === choice.length}
                 indeterminate={
-                  selection.length > 0 && selection.length !== data.length
+                  selection.length > 0 && selection.length !== choice.length
                 }
                 transitionDuration={0}
               />
@@ -168,7 +169,7 @@ export function SearchAbleAndSelectedTable({ data, onSelect }: TableSortProps) {
             rows
           ) : (
             <tr>
-              <td colSpan={Object.keys(data[0]).length}>
+              <td colSpan={Object.keys(choice[0]).length}>
                 <Text weight={500} align="center">
                   Nothing found
                 </Text>

@@ -6,7 +6,6 @@ import {
   Group,
   Text,
   TextInput,
-  rem,
   Checkbox,
 } from "@mantine/core";
 import { keys } from "@mantine/utils";
@@ -110,7 +109,7 @@ export function SearchAbleAndSelectedTable({
   return (
     <ScrollArea>
       <TextInput
-        placeholder="Search by any field"
+        placeholder="Search"
         mb="md"
         icon={<IconSearch size="0.9rem" stroke={1.5} />}
         value={search}

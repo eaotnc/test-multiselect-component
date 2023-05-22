@@ -14,10 +14,10 @@ export function PopOverToggle() {
   const renderSelection = () => {
     if (selection.length <= 3) {
       return selection.map((item, key) => (
-        <span>
+        <>
           {item}
           {key === selection.length - 1 ? " " : ", "}
-        </span>
+        </>
       ));
     } else {
       return `${selection.length} Selected`;
